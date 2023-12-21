@@ -1,4 +1,5 @@
 const allPokeUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0";
+const pokeUrl = "https://pokeapi.co/api/v2/pokemon/";
 
 // type colors from ref
 const typeColor = {
@@ -43,6 +44,7 @@ async function getRandomData() {
   //   console.log("count:", data.count);
   let randoPoke = getRandomInt(data.count);
   //   console.log("randoPoke: ", randoPoke);
+  //   const pokeData = await getData(pokeUrl + `${randoPoke}`).catch(() => null);
 
   //   console.log("data.results[randoPoke][url]: ", data.results[randoPoke].url);
   const pokeData = await getData(data.results[randoPoke].url).catch(() => null);
@@ -50,15 +52,18 @@ async function getRandomData() {
   if (pokeData === null) {
     makingData();
   } else {
+    //     console.log("pokeData: ", pokeData);
+    //     console.log("pokeData.name: ", pokeData.name);
+    //     console.log("data.results", data.results);
     if (pokeData.name.includes("-")) {
       let one = pokeData.name.split("-");
       pokeData.name = one[0];
     }
-
+    // console.log("pokeData.name: ", pokeData.name);
     //this will get our disney quote
     let disQuoted = getQuote();
 
-    // for when a url doesn't come with an image
+    // let imgResult = "";
     let imposterImg = "./images/crewmate-among-us-big-keychains.jpg";
 
     let pokeObject = {
@@ -113,7 +118,8 @@ makingData();
 const buildPokeCard = (pokemonData) => {
   let pokeType;
   let oneType;
-
+  //   getType(pokemonData);
+  //trying to move this outside my function makes the layout funky
   if (pokemonData.type.includes("-")) {
     oneType = pokemonData.type.split(" - ");
     pokeType = oneType[0];
@@ -131,7 +137,9 @@ const buildPokeCard = (pokemonData) => {
     "style",
     `background: radial-gradient(circle at 50% 0%, ${themeColor} 36%, #ffffff 36%)`
   );
+
   $card.innerHTML = `
+  
     <div id="${pokemonData.id}" class="poke-card" >
         <div class="card-body">
             <div>

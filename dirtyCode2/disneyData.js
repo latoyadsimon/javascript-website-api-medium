@@ -102,4 +102,15 @@ let disneyData = `:"The flower that blooms in adversity is the most rare and bea
 :"You got the makings of greatness in you, but you gotta take the helm and chart your own course. Stick to it, no matter the squalls" – Treasure Planet
 :“To infinity, and beyond!” – Toy Story`;
 
+// let disneyArr = disneyData.split(":");
+// console.log(disneyArr);
+
+// let disneyQuotes = disneyArr.map((quote) => quote.split("-"));
+// let disneyQuotes = disneyArr.map((quote) => quote);
+// console.log(disneyQuotes);
+
+// let quoteChar = disneyQuotes.map((quote) => quote[0].split("-"));
+// console.log(quoteChar)
+
 let quoteChar = disneyData.split(":");
+// console.log(quoteChar);

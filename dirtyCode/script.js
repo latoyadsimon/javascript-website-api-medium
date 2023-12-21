@@ -1,4 +1,5 @@
 const allPokeUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0";
+const pokeUrl = "https://pokeapi.co/api/v2/pokemon/";
 
 // type colors from ref
 const typeColor = {
@@ -22,6 +23,7 @@ const typeColor = {
   water: "#0190FF",
 };
 
+let quotedDisney = "";
 // we want a random pokemon to show up each time, so we know we will need a random number generator
 //random number generator
 const getRandomInt = (max) => {
@@ -34,32 +36,37 @@ const getData = (url) => {
 
 const getQuote = () => {
   let disneyQuote = getRandomInt(quoteChar.length);
-  let quotedDisney = quoteChar[disneyQuote];
+  quotedDisney = quoteChar[disneyQuote];
   return quotedDisney;
 };
 
 async function getRandomData() {
   const data = await getData(allPokeUrl);
-  //   console.log("count:", data.count);
+  console.log("count:", data.count);
   let randoPoke = getRandomInt(data.count);
-  //   console.log("randoPoke: ", randoPoke);
-
-  //   console.log("data.results[randoPoke][url]: ", data.results[randoPoke].url);
-  const pokeData = await getData(data.results[randoPoke].url).catch(() => null);
+  console.log("randoPoke: ", randoPoke);
+  const pokeData = await getData(pokeUrl + `${randoPoke}`).catch(() => null);
 
   if (pokeData === null) {
-    makingData();
+    getRandomData().then((result) => {
+      console.log("heres the result: ", result);
+      let card = buildPokeCard(result);
+      collectionsGrid.append(card);
+    });
   } else {
+    console.log("pokeData: ", pokeData);
+    console.log("pokeData.name: ", pokeData.name);
+    console.log("data.results", data.results);
     if (pokeData.name.includes("-")) {
       let one = pokeData.name.split("-");
       pokeData.name = one[0];
     }
-
+    console.log("pokeData.name: ", pokeData.name);
     //this will get our disney quote
     let disQuoted = getQuote();
 
-    // for when a url doesn't come with an image
-    let imposterImg = "./images/crewmate-among-us-big-keychains.jpg";
+    // let imgResult = "";
+    let imposterImg = "./images/images/crewmate-among-us-big-keychains.jpg";
 
     let pokeObject = {
       name: pokeData.name.toUpperCase(),
@@ -68,14 +75,13 @@ async function getRandomData() {
       type: pokeData.types.map((type) => type.type.name).join(" - "),
       alt: "image of the pokemon: " + pokeData.name,
       disQuote: disQuoted,
-      imgWrapper: "img-wrapper",
     };
 
     if (
       pokeData.sprites["other"]["official-artwork"]["front_default"] === null
     ) {
       pokeObject = {
-        name: pokeData.name.toUpperCase() + " - IMPOSTER",
+        name: pokeData.name.toUpperCase() + "IMPOSTER",
         image: imposterImg,
         id: pokeData.id,
         type: pokeData.types.map((type) => type.type.name).join(" - "),
@@ -84,11 +90,27 @@ async function getRandomData() {
           pokeData.name +
           " so here is an imposter/crewmate",
         disQuote: disQuoted,
-        imgWrapper: "noImg",
       };
     }
 
-    console.log("pokeObject: ", pokeObject);
+    console.log(
+      pokeData.name.toUpperCase(),
+      pokeData.sprites["other"]["official-artwork"]["front_default"],
+      pokeData.id,
+      pokeData.types.map((type) => type.type.name).join(" - "),
+      "image of the pokemon: ",
+      pokeData.name,
+      disQuoted
+    );
+
+    // return {
+    //   name: pokeData.name.toUpperCase(),
+    //   image: pokeData.sprites["other"]["official-artwork"]["front_default"],
+    //   id: pokeData.id,
+    //   type: pokeData.types.map((type) => type.type.name).join(" - "),
+    //   alt: "image of the pokemon: " + pokeData.name,
+    //   disQuote: disQuoted,
+    // };
     return pokeObject;
   }
 }
@@ -100,27 +122,22 @@ const translateBtn = document.querySelector("#translate-btn");
 const modalBody = document.querySelector(".modal-body");
 const translatedBody = document.querySelector(".poke-name #translated");
 
-let makingData = () =>
-  getRandomData().then((result) => {
-    collectionsGrid.innerHTML = "";
-    modalBody.innerHTML = "";
-    console.log("heres the result: ", result);
-    let card = buildPokeCard(result);
-    collectionsGrid.append(card);
-  });
-makingData();
+getRandomData().then((result) => {
+  console.log("heres the result: ", result);
+  let card = buildPokeCard(result);
+  collectionsGrid.append(card);
+  //   innerQuote(result.name);
+});
 
 const buildPokeCard = (pokemonData) => {
   let pokeType;
   let oneType;
-
   if (pokemonData.type.includes("-")) {
     oneType = pokemonData.type.split(" - ");
     pokeType = oneType[0];
   } else {
     pokeType = pokemonData.type;
   }
-
   const themeColor = typeColor[pokeType];
 
   const $card = document.createElement("div");
@@ -131,33 +148,81 @@ const buildPokeCard = (pokemonData) => {
     "style",
     `background: radial-gradient(circle at 50% 0%, ${themeColor} 36%, #ffffff 36%)`
   );
+  //   $card.setAttribute(
+  //     "style",
+  //     `background: radial-gradient(circle at 30% 0%, ${themeColor} 36%, #ffffff 36%)`
+  //   );
+
   $card.innerHTML = `
+  
     <div id="${pokemonData.id}" class="poke-card" >
-        <div class="card-body">
+        <div class="card-body" 
+       
+        >
+            
             <div>
-                <div class=${pokemonData.imgWrapper}>
-                    <img src=${pokemonData.image} />
-                </div>
+            <div class=img-wrapper>
+                <img src=${pokemonData.image} />
+            </div>
             <h2 class="poke-name" id="translated">"${pokemonData.name}"</h2>
             
             </div>
             <h2 class="poke-name">- ${pokemonData.name}</h2>
             <div class="types">
                 <span style="background: ${themeColor}">${pokemonData.type}</span>
+         
             </div>
+          
         </div>
     </div>
 `;
 
+  //   modalBody.innerHTML = $card.innerHTML;
   modalBody.innerHTML = pokemonData.disQuote;
 
   console.log("modalBody inner should be: ", modalBody.innerHTML);
 
   return $card;
 };
-
+// translatedBody.innerHTML = quotedDisney;
+// console.log("translatedBody inner should be: ", translatedBody.innerHTML);
 //get new pokemon button
 fetchNewPokemonBtn.addEventListener("click", () => {
   console.log("clicked for new pokemon");
-  makingData();
+  collectionsGrid.innerHTML = "";
+  modalBody.innerHTML = "";
+  //   translatedBody.innerHTML = "";
+
+  //   quoteText.innerHTML = "";
+  //   data = "";
+  //   pokeData = "";
+  getRandomData().then((result) => {
+    console.log("heres the result: ", result);
+    let card = buildPokeCard(result);
+    collectionsGrid.append(card);
+    // innerQuote(result.name);
+  });
 });
+
+//   let innerQuote = "";
+// let innerQuote = (result) => {
+//   translateBtn.addEventListener("click", () => {
+//     const quoteText = document.querySelector("#translated");
+//     console.log("quoteText", quoteText);
+
+//     console.log("translating now");
+//     console.log("the disney quote: ", quotedDisney);
+//     console.log("pokemon Quote: ", quoteText.innerHTML);
+//     // result = `"${result}"`;
+//     console.log("result", result);
+//     //   console.log(innerQuote);
+//     console.log(quoteText.innerHTML === quotedDisney[0]);
+//     console.log(quoteText.innerHTML === result);
+//     if (quoteText.innerHTML === quotedDisney[0]) {
+//       quoteText.innerHTML = result;
+//     } else if (quoteText.innerHTML === result) {
+//       quoteText.innerHTML = quotedDisney;
+//     }
+//     return quoteText;
+//   });
+// };

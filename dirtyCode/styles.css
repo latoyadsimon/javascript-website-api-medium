@@ -92,23 +92,3 @@ div.card-body div.types {
   flex-wrap: nowrap;
   align-items: center;
 }
-
-/* .img-wrapper {
-  height: 420px;
-} */
-.noImg {
-  display: block;
-  width: 145px;
-  max-height: 200px;
-  position: relative;
-  margin: 5px auto;
-  border: 2px solid black;
-  border-radius: 50px;
-  overflow: hidden;
-}
-
-.noImg img {
-  width: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
