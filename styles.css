@@ -1,0 +1,94 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #eff3ff;
+  margin: 0% 5%;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+section {
+  max-width: 1400px;
+  min-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  padding: 0rem 1rem;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* padding-bottom: 1rem; */
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+div.card-body div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+div.card-body div h2.poke-name {
+  background: #d28a14b8;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+div.card-body h2.poke-name,
+div.card-body div.types {
+  display: flex;
+  justify-content: center;
+}
+
+.btn:hover {
+  background-color: goldenrod;
+}
+.btn {
+  padding: 10px 10px;
+  font-size: 18px;
+  background-color: #101010;
+  color: #ffffff;
+  position: relative;
+  margin: 30px auto;
+  border: none;
+  border-radius: 5px;
+}
+.types {
+  display: flex;
+  justify-content: space-around;
+  margin: 0px 0 1px 0;
+}
+
+.types span {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  font-weight: 600;
+  padding: 5px 20px;
+  border-radius: 20px;
+  color: #ffffff;
+}
+
+#pokemonQuote {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+}
