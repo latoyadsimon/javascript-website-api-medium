@@ -1,1 +1,4 @@
 https://github.com/latoyadsimon/javascript-website-api-medium.git
+
+link to medium:
+https://medium.com/@1stforgottentoy/pok%C3%A9mon-quote-generator-tutorial-ba0f8b90b688
